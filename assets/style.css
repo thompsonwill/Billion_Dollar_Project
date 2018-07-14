@@ -2,3 +2,8 @@
     border: 2px solid black;
     margin: 5px;
 }
+
+h3 {
+    font-size: 18px;
+    text-align: center;
+}

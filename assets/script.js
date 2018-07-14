@@ -1,5 +1,5 @@
-  $(document).ready(function () {
-  
+$(document).ready(function () {
+
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyAo1nuu9HCfzeRVcXGvCpqrVxc_A-4PRbg",
@@ -11,7 +11,7 @@
   };
   firebase.initializeApp(config);
 
- 
+
 
   var database = firebase.database();
 
@@ -21,7 +21,7 @@
   var groupName;
 
   // Capture Button Click
-  $("#add-member").on("click", function(event) {
+  $("#add-member").on("click", function (event) {
     // Don't refresh the page!
     event.preventDefault();
 
@@ -32,37 +32,53 @@
     console.log('name', name)
     phone = $("#phone-input").val().trim();
     groupName = $("#groupName").val().trim();
-    
 
-    database.ref().set({
+
+    var newEntry = {         
       name: name,
       phone: phone,
       groupName: groupName
-      
-    });
+    };
 
+    database.ref().push(newEntry);
+    console.log('newEntry', newEntry.name)
   });
 
-//   // Firebase watcher + initial loader HINT: .on("value")
-//   database.ref().on("value", function(snapshot) {
+  //function to append user names to group members column
+  //TO DO: names are not stacking. need to fix
+  database.ref().on("child_added", function (childSnapshot) {
+    console.log(childSnapshot.val());
 
-//     // Log everything that's coming out of snapshot
-//     console.log(snapshot.val());
-//     console.log(snapshot.val().name);
-//     console.log(snapshot.val().phone);
-//     console.log(snapshot.val().groupName);
-    
 
-//     // Change the HTML to reflect
-//     $("#name-display").text(snapshot.val().name);
-//     $("#email-display").text(snapshot.val().phone);
-//     $("#age-display").text(snapshot.val().groupName);
-   
+    var userList = function () {
 
-//     // Handle the errors
-//   }, function(errorObject) {
-//     console.log("Errors handled: " + errorObject.code);
-//   });
+      var userName = $("<td>").text(childSnapshot.val().name);
+      console.log('userName', userName)
 
+      $("#group-members").append(userName);
+    };
+
+    userList();
+    //   // Firebase watcher + initial loader HINT: .on("value")
+    //   database.ref().on("value", function(snapshot) {
+
+    //     // Log everything that's coming out of snapshot
+    //     console.log(snapshot.val());
+    //     console.log(snapshot.val().name);
+    //     console.log(snapshot.val().phone);
+    //     console.log(snapshot.val().groupName);
+
+
+    //     // Change the HTML to reflect
+    //     $("#name-display").text(snapshot.val().name);
+    //     $("#email-display").text(snapshot.val().phone);
+    //     $("#age-display").text(snapshot.val().groupName);
+
+
+    //     // Handle the errors
+    //   }, function(errorObject) {
+    //     console.log("Errors handled: " + errorObject.code);
+    //   });
+  });
 
 });
