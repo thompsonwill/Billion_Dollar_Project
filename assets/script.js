@@ -11,7 +11,9 @@ $(document).ready(function () {
   };
   firebase.initializeApp(config);
 
+  function initializePage() {
 
+  }
 
   var database = firebase.database();
 
@@ -19,6 +21,75 @@ $(document).ready(function () {
   var name;
   var phone;
   var groupName;
+  var eventName;
+
+  // Create Row Function
+  function createRow(name) {
+    name = $("<td>").text(name);
+
+    var tBody = $("#groupMembers");
+    var tRow = $("<tr>");
+    tRow.append(name);
+
+    tBody.append(tRow);
+
+  }
+
+  function createEventRow(eventName, eventTitle) {
+    eventName = $("<td>").text(eventName);
+    eventName.addClass("event");
+
+    eventTitle = $("<td>").text(eventTitle);
+    eventTitle.addClass("event");
+
+    var tBody = $("#events");
+    var tRow = $("<tr>");
+    tRow.append(eventName, eventTitle);
+
+    tBody.append(tRow);
+
+  }
+
+  function createSelectedRow(eventName, eventTitle) {
+    eventName = $("<td>").text(eventName);
+
+    eventName.addClass("event");
+
+    eventTitle = $("<td>").text(eventTitle);
+    eventTitle.addClass("event");
+
+    var tBody = $("#selected-events");
+    var tRow = $("<tr>");
+    tRow.append(eventName, eventTitle);
+
+    tBody.append(tRow);
+
+  }
+
+
+
+  // Capture Event Click
+  $("body").on("click", ".event", function (event) {
+    eventName = $(this).html();
+    console.log("Line 74 " + eventName);
+    var eventEntry = {
+      eventName: eventName,
+    };
+    database.ref().push(eventEntry);
+
+  });
+
+  database.ref().on("child_added", function (eventSnapshot) {
+    console.log("Line 82 " + eventSnapshot.val().eventName);
+    createSelectedRow(eventSnapshot.val().eventName);
+    // createEventRow(eventSnapshot.val().eventName);
+
+
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
+
 
   // Capture Button Click
   $("#add-member").on("click", function (event) {
@@ -34,7 +105,7 @@ $(document).ready(function () {
     groupName = $("#groupName").val().trim();
 
 
-    var newEntry = {         
+    var newEntry = {
       name: name,
       phone: phone,
       groupName: groupName
@@ -49,36 +120,55 @@ $(document).ready(function () {
   database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
 
-
-    var userList = function () {
-
-      var userName = $("<td>").text(childSnapshot.val().name);
-      console.log('userName', userName)
-
-      $("#group-members").append(userName);
-    };
-
-    userList();
-    //   // Firebase watcher + initial loader HINT: .on("value")
-    //   database.ref().on("value", function(snapshot) {
-
-    //     // Log everything that's coming out of snapshot
-    //     console.log(snapshot.val());
-    //     console.log(snapshot.val().name);
-    //     console.log(snapshot.val().phone);
-    //     console.log(snapshot.val().groupName);
+    createRow(childSnapshot.val().name);
 
 
-    //     // Change the HTML to reflect
-    //     $("#name-display").text(snapshot.val().name);
-    //     $("#email-display").text(snapshot.val().phone);
-    //     $("#age-display").text(snapshot.val().groupName);
-
-
-    //     // Handle the errors
-    //   }, function(errorObject) {
-    //     console.log("Errors handled: " + errorObject.code);
-    //   });
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
   });
+
+  function displayQuery() {
+    // var search = $(this).attr("data-search");
+
+    //eventful API
+
+
+    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=rock&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
+    var zipCode = 60654;
+    var eventKeyword = "rock";
+
+    $.ajax({
+      url: queryURL,
+      method: "GET"
+    }).then(function (response) {
+      console.log("API" + response._embedded.events[1].name);
+      // eventName = response._embedded.events[1].name;
+      // eventTitle = response.Year;
+
+
+
+
+      // var results = response._embedded.events[""].data;
+      for (var i = 0; i < 10; i++) {
+        eventName = response._embedded.events[i].name;
+        createEventRow(eventName);
+      };
+
+
+
+    });
+
+    // "https://api.giphy.com/v1/gifs/search?q=" +
+    // search  + "&api_key=9TDPBQSS97BXCBXaZRIJFKSq1bnBWFpk&limit=10";
+
+    console.log("stop playin with the for loop")
+
+  };
+
+  displayQuery();
+
+
+  //TO DO: use math.max to determine highest voted item
 
 });
