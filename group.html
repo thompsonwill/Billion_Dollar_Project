@@ -31,6 +31,10 @@
     <div class="jumbotron text-white bg-secondary mb-3">
         <h1 class="display-4">Super Happy Fun Time</h1>
         <p class="lead">The Group</p>
+        <form>
+            <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
+        </form>
+
     </div>
     <br>
 
@@ -38,12 +42,44 @@
         <div class="row">
             <div id="group-members" class="col-sm">
                 <h3>Group Members</h3>
+                <table class="table table-striped card-body" id="groupMembers">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Insert name rows here -->
+                    </tbody>
+                </table>
             </div>
             <div class="col-sm">
                 <h3>Select Events</h3>
+                <table id="events" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Event Name</th>
+                            <th scope="col">Venue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Insert name rows here -->
+                    </tbody>
+                </table>
             </div>
             <div class="col-sm">
                 <h3>Selected Events</h3>
+                <table id="selected-events" class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Selected Events</th>
+                            <th scope="col">Venue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Insert name rows here -->
+                    </tbody>
+                </table>
             </div>
             <div class="col-sm">
                 <h3>Top Event</h3>
