@@ -11,9 +11,7 @@ $(document).ready(function () {
   };
   firebase.initializeApp(config);
 
-  function initializePage() {
 
-  }
 
   var database = firebase.database();
 
@@ -22,6 +20,9 @@ $(document).ready(function () {
   var phone;
   var groupName;
   var eventName;
+  var votes = 0;
+  var votedOnEvents = [];
+
 
   // Create Row Function
   function createRow(name) {
@@ -52,28 +53,52 @@ $(document).ready(function () {
 
   function createSelectedRow(eventName, eventTitle) {
     eventName = $("<td>").text(eventName);
-  
-    eventName.addClass("event");
+
+    
+    eventName.addClass("selected-event");
 
     eventTitle = $("<td>").text(eventTitle);
-    eventTitle.addClass("event");
+    eventTitle.addClass("selected-event");
 
     var tBody = $("#selected-events");
     var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle);
+    tRow.append(eventName, eventTitle, votes);
 
     tBody.append(tRow);
 
+
+    // function clickHandler () {
+    //   var $target = $(this),
+    //       $span = $target.siblings("span").children(".selected-event"),
+    //       $votes = $("#sumClicks");
+    //   $span.text(parseInt($span.text()) + 1);
+    //   votes += 1;
+    //   $votes.text(votes);
+    // }
+    
+    // $(".selected-event").click(clickHandler)
+
+
+    // function to capture votes on each event
+    $(".selected-event").on("click", $(this), function () {
+      votedOnEvents.push(this);
+      console.log('votedOnEvents', votedOnEvents)
+      votes++;
+      console.log('votes', votes)
+      
+      
+    });
   }
 
 
 
-  // Capture Event Click
-  $("document").on("click", ".event", function (event) {
+  // click events for selecting events
+  $("body").on("click", ".event", function (event) {
     var eName = $(this).attr("events");
     console.log("Clicked event: " + eName);
     var eventEntry = {
       eventName: eventName,
+      votes: votes
     };
     database.ref().push(eventEntry);
 
@@ -82,7 +107,11 @@ $(document).ready(function () {
   database.ref().on("child_added", function (eventSnapshot) {
     console.log(eventSnapshot.val());
     createSelectedRow(eventSnapshot.val().eventName);
+    createSelectedRow(eventSnapshot.val().votes);
+    topVoted(eventSnapshot.val().eventName);
     // createEventRow(eventSnapshot.val().eventName);
+
+
 
 
     // Handle the errors
@@ -93,7 +122,7 @@ $(document).ready(function () {
 
   // Capture Button Click
   $("#add-member").on("click", function (event) {
-    // Don't refresh the page!
+   
     event.preventDefault();
 
     // YOUR TASK!!!
@@ -116,7 +145,6 @@ $(document).ready(function () {
   });
 
   //function to append user names to group members column
-  //TO DO: names are not stacking. need to fix
   database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
 
@@ -134,15 +162,16 @@ $(document).ready(function () {
     //eventful API
 
     var movie = ["The Matrix"];
-    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=rock&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
-    var zipCode = 60654;
+    var zipCode = 60605;
     var eventKeyword = "rock";
+    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=" + eventKeyword + "&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
+
 
     $.ajax({
       url: queryURL,
       method: "GET"
     }).then(function (response) {
-      console.log("API" + response._embedded.events[1].name);
+      // console.log("API" + response._embedded.events[1].name);
       // eventName = response._embedded.events[1].name;
       // eventTitle = response.Year;
 
@@ -152,7 +181,8 @@ $(document).ready(function () {
       // var results = response._embedded.events[""].data;
       for (var i = 0; i < 10; i++) {
         eventName = response._embedded.events[i].name;
-        createEventRow(eventName);
+        eventVenue = response._embedded.events[i]._embedded.venues[0].name;
+        createEventRow(eventName, eventVenue);
       };
 
 
@@ -162,7 +192,7 @@ $(document).ready(function () {
     // "https://api.giphy.com/v1/gifs/search?q=" +
     // search  + "&api_key=9TDPBQSS97BXCBXaZRIJFKSq1bnBWFpk&limit=10"; 
 
-    console.log("stop playin with the for loop")
+
 
   };
 
@@ -170,6 +200,29 @@ $(document).ready(function () {
 
 
   //TO DO: use math.max to determine highest voted item
+
+  //function to display top voted event
+  function topVoted(eventName, eventTitle) {
+    var mostVotes = Math.max(0, 1, 2, 3, 4);
+
+
+    eventName = $("<td>").text(eventName);
+
+    eventName.addClass("event");
+
+    eventTitle = $("<td>").text(eventTitle);
+    eventTitle.addClass("event");
+
+    var tBody = $("#top-event");
+    var tRow = $("<tr>");
+    tRow.append(eventName, eventTitle, votes);
+
+    tBody.append(tRow);
+
+  }
+
+
+
 
 });
 

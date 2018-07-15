@@ -1,11 +1,16 @@
 body {
-    /* background-image:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
-    background-size: 100%; */
+    background-image:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
+    background-size: 100%;
+}
+
+.jumbotron {
+    max-height: 240px;
 }
 
 .col-sm {
     border: 2px solid black;
-    margin: 5px;
+    margin: 8px;
+    background-color: white;
     
 }
 
