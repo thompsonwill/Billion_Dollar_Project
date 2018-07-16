@@ -67,27 +67,32 @@ $(document).ready(function () {
     tBody.append(tRow);
 
 
-    // function clickHandler () {
-    //   var $target = $(this),
-    //       $span = $target.siblings("span").children(".selected-event"),
-    //       $votes = $("#sumClicks");
-    //   $span.text(parseInt($span.text()) + 1);
-    //   votes += 1;
-    //   $votes.text(votes);
-    // }
+    function clickHandler () {
+      
+    }
     
     // $(".selected-event").click(clickHandler)
+    $(document).on("click", ".selected-event", function(){
+      var $target = $(this),
+          $span = $target.siblings("span").children(".selected-event"),
+          $votes = $("#sumClicks");
+      $span.text(parseInt($span.text()) + 1);
+      votes += 1;
+      console.log('votes', votes)
+      $votes.text(votes);
+    });
+
 
 
     // function to capture votes on each event
-    $(".selected-event").on("click", $(this), function () {
-      votedOnEvents.push(this);
-      console.log('votedOnEvents', votedOnEvents)
-      votes++;
-      console.log('votes', votes)
+    // $(".selected-event").on("click", $(this), function () {
+    //   votedOnEvents.push(this);
+    //   console.log('votedOnEvents', votedOnEvents)
+    //   votes++;
+    //   console.log('votes', votes)
       
       
-    });
+    // });
   }
 
 
@@ -107,7 +112,7 @@ $(document).ready(function () {
   database.ref().on("child_added", function (eventSnapshot) {
     console.log(eventSnapshot.val());
     createSelectedRow(eventSnapshot.val().eventName);
-    createSelectedRow(eventSnapshot.val().votes);
+    // createSelectedRow(eventSnapshot.val().votes);
     topVoted(eventSnapshot.val().eventName);
     // createEventRow(eventSnapshot.val().eventName);
 
