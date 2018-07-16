@@ -24,7 +24,7 @@ $(document).ready(function () {
   var votedOnEvents = [];
 
 
-  // Create Row Function
+  // Add new users to group members column
   function createRow(name) {
     name = $("<td>").text(name);
 
@@ -36,103 +36,12 @@ $(document).ready(function () {
 
   }
 
-  function createEventRow(eventName, eventTitle) {
-    eventName = $("<td>").text(eventName);
-    eventName.addClass("event");
-
-    eventTitle = $("<td>").text(eventTitle);
-    eventTitle.addClass("event");
-
-    var tBody = $("#events");
-    var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle);
-
-    tBody.append(tRow);
-
-  }
-
-  function createSelectedRow(eventName, eventTitle) {
-    eventName = $("<td>").text(eventName);
-
-    
-    eventName.addClass("selected-event");
-
-    eventTitle = $("<td>").text(eventTitle);
-    eventTitle.addClass("selected-event");
-
-    var tBody = $("#selected-events");
-    var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle, votes);
-
-    tBody.append(tRow);
-
-
-    function clickHandler () {
-      
-    }
-    
-    // $(".selected-event").click(clickHandler)
-    $(document).on("click", ".selected-event", function(){
-      var $target = $(this),
-          $span = $target.siblings("span").children(".selected-event"),
-          $votes = $("#sumClicks");
-      $span.text(parseInt($span.text()) + 1);
-      votes += 1;
-      console.log('votes', votes)
-      $votes.text(votes);
-    });
-
-
-
-    // function to capture votes on each event
-    // $(".selected-event").on("click", $(this), function () {
-    //   votedOnEvents.push(this);
-    //   console.log('votedOnEvents', votedOnEvents)
-    //   votes++;
-    //   console.log('votes', votes)
-      
-      
-    // });
-  }
-
-
-
-  // click events for selecting events
-  $("body").on("click", ".event", function (event) {
-    var eName = $(this).attr("events");
-    console.log("Clicked event: " + eName);
-    var eventEntry = {
-      eventName: eventName,
-      votes: votes
-    };
-    database.ref().push(eventEntry);
-
-  });
-
-  database.ref().on("child_added", function (eventSnapshot) {
-    console.log(eventSnapshot.val());
-    createSelectedRow(eventSnapshot.val().eventName);
-    // createSelectedRow(eventSnapshot.val().votes);
-    topVoted(eventSnapshot.val().eventName);
-    // createEventRow(eventSnapshot.val().eventName);
-
-
-
-
-    // Handle the errors
-  }, function (errorObject) {
-    console.log("Errors handled: " + errorObject.code);
-  });
-
-
-  // Capture Button Click
+  // Click event to add group members to firebase 
   $("#add-member").on("click", function (event) {
-   
+
     event.preventDefault();
 
-    // YOUR TASK!!!
-    // Code in the logic for storing and retrieving the most recent user.
-    // Don't forget to provide initial data to your Firebase database.
+
     name = $("#name-input").val().trim();
     console.log('name', name)
     phone = $("#phone-input").val().trim();
@@ -149,7 +58,8 @@ $(document).ready(function () {
     console.log('newEntry', newEntry.name)
   });
 
-  //function to append user names to group members column
+
+  // event to pull user names from firebase 
   database.ref().on("child_added", function (childSnapshot) {
     console.log(childSnapshot.val());
 
@@ -161,12 +71,10 @@ $(document).ready(function () {
     console.log("Errors handled: " + errorObject.code);
   });
 
+
+  // ticketmaster API query
   function displayQuery() {
-    // var search = $(this).attr("data-search"); 
 
-    //eventful API
-
-    var movie = ["The Matrix"];
     var zipCode = 60605;
     var eventKeyword = "rock";
     var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=" + eventKeyword + "&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
@@ -176,12 +84,6 @@ $(document).ready(function () {
       url: queryURL,
       method: "GET"
     }).then(function (response) {
-      // console.log("API" + response._embedded.events[1].name);
-      // eventName = response._embedded.events[1].name;
-      // eventTitle = response.Year;
-
-
-
 
       // var results = response._embedded.events[""].data;
       for (var i = 0; i < 10; i++) {
@@ -189,28 +91,29 @@ $(document).ready(function () {
         eventVenue = response._embedded.events[i]._embedded.venues[0].name;
         createEventRow(eventName, eventVenue);
       };
-
-
-
     });
-
-    // "https://api.giphy.com/v1/gifs/search?q=" +
-    // search  + "&api_key=9TDPBQSS97BXCBXaZRIJFKSq1bnBWFpk&limit=10"; 
-
-
-
   };
 
   displayQuery();
 
+  // function to populate event rows from firebase
+  function createEventRow(eventName, eventTitle) {
+    eventName = $("<td>").text(eventName);
+    eventName.addClass("event");
 
-  //TO DO: use math.max to determine highest voted item
+    eventTitle = $("<td>").text(eventTitle);
+    eventTitle.addClass("event");
 
-  //function to display top voted event
-  function topVoted(eventName, eventTitle) {
-    var mostVotes = Math.max(0, 1, 2, 3, 4);
+    var tBody = $("#events");
+    var tRow = $("<tr>");
+    tRow.append(eventName, eventTitle);
 
+    tBody.append(tRow);
 
+  }
+
+  // function to add row to selected events column
+  function createSelectedRow(eventName, eventTitle) {
     eventName = $("<td>").text(eventName);
 
     eventName.addClass("event");
@@ -218,17 +121,78 @@ $(document).ready(function () {
     eventTitle = $("<td>").text(eventTitle);
     eventTitle.addClass("event");
 
-    var tBody = $("#top-event");
+    var voteBtn = $("<button>");
+    voteBtn.addClass("vote-button");
+    voteBtn.text(votes);
+
+
+    var tBody = $("#selected-events");
     var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle, votes);
+    tRow.append(eventName, eventTitle, voteBtn);
 
     tBody.append(tRow);
 
   }
 
+  // On click to push to selected row column
+  $(document).on("click", ".event", function () {
+    eventName = $(this).html();
+    console.log("Line 74 " + eventName);
+
+    // $(eventName).removeClass("event").addClass("selected-event");
+    var eventEntry = {
+      eventName: eventName,
+      votes: votes
+    };
+    database.ref().push(eventEntry);
+
+
+  });
+
+  database.ref().on("child_added", function (eventSnapshot) {
+    console.log("Line 82 " + eventSnapshot.val().eventName);
+    createSelectedRow(eventSnapshot.val().eventName);
+    // createEventRow(eventSnapshot.val().eventName);
 
 
 
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  })
+
+
+  function voteClicks() {
+
+    // event.preventDefault();
+    // var $target = $(this),
+        // votes = $target.siblings(votes).children(".vote-button")
+    // $votes = $("#sumClicks");
+    // $(this).text;
+    votes += 1;
+    // $votes.text(votes);
+    $(this).text(votes);
+
+    console.log('votes', votes)
+
+    var voteEntry = {
+      votes: votes
+    };
+    database.ref().update(voteEntry);
+    console.log('voteEntry', voteEntry)
+
+  }
+
+  // on click event to count votes per event
+  $(document).on("click", ".vote-button", voteClicks);
+
+
+  database.ref().on("child_added", function (eventSnapshot) {
+    eventSnapshot.val().votes;
+
+
+  });
+  //end document.ready
 });
 
 
