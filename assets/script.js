@@ -22,7 +22,8 @@ $(document).ready(function () {
   var eventName;
   var votes = 0;
   var votedOnEvents = [];
-
+  var voteBtn;
+  
 
   // Add new users to group members column
   function createRow(name) {
@@ -51,9 +52,10 @@ $(document).ready(function () {
     var newEntry = {
       name: name,
       phone: phone,
-      groupName: groupName
+      groupName: groupName,
     };
 
+    
     database.ref().push(newEntry);
     console.log('newEntry', newEntry.name)
   });
@@ -76,7 +78,7 @@ $(document).ready(function () {
   function displayQuery() {
 
     var zipCode = 60605;
-    var eventKeyword = "rock";
+    var eventKeyword = "jazz";
     var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=" + eventKeyword + "&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
 
 
@@ -121,11 +123,10 @@ $(document).ready(function () {
     eventTitle = $("<td>").text(eventTitle);
     eventTitle.addClass("event");
 
-    var voteBtn = $("<button>");
+    voteBtn = $("<button>");
     voteBtn.addClass("vote-button");
-    voteBtn.text(votes);
-
-
+    voteBtn.text(0);
+    
     var tBody = $("#selected-events");
     var tRow = $("<tr>");
     tRow.append(eventName, eventTitle, voteBtn);
@@ -142,7 +143,6 @@ $(document).ready(function () {
     // $(eventName).removeClass("event").addClass("selected-event");
     var eventEntry = {
       eventName: eventName,
-      votes: votes
     };
     database.ref().push(eventEntry);
 
@@ -152,6 +152,7 @@ $(document).ready(function () {
   database.ref().on("child_added", function (eventSnapshot) {
     console.log("Line 82 " + eventSnapshot.val().eventName);
     createSelectedRow(eventSnapshot.val().eventName);
+    voteBtn.text(eventSnapshot.val().votes)
     // createEventRow(eventSnapshot.val().eventName);
 
 
@@ -169,9 +170,10 @@ $(document).ready(function () {
         // votes = $target.siblings(votes).children(".vote-button")
     // $votes = $("#sumClicks");
     // $(this).text;
-    votes += 1;
+    
     // $votes.text(votes);
-    $(this).text(votes);
+    // votes = $(this).html();
+    $(this).text(votes += 1);
 
     console.log('votes', votes)
 
@@ -187,8 +189,9 @@ $(document).ready(function () {
   $(document).on("click", ".vote-button", voteClicks);
 
 
-  database.ref().on("child_added", function (eventSnapshot) {
-    eventSnapshot.val().votes;
+  database.ref().on("value", function (eventSnapshot) {
+    
+    voteBtn.text(eventSnapshot.val().votes)
 
 
   });
