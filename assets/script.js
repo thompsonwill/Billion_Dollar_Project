@@ -43,7 +43,7 @@ $(document).ready(function () {
   function createRow(name) {
     name = $("<li>").text(name);
 
-  $('#group-members .list').append(name);
+    $('#group-members .list').append(name);
 
   }
 
@@ -170,41 +170,41 @@ $(document).ready(function () {
 
 
 // add top choice to top choice page via firebase
-function addTopEvent(eventName) {
-  eventName = $("<td>").text(eventName);
+// function addTopEvent(eventName) {
+//   eventName = $("<td>").text(eventName);
 
-  var tBody = $("#selected-events");
-  var tRow = $("<tr>");
-  tRow.append(eventName);
+//   var tBody = $("#selected-events");
+//   var tRow = $("<tr>");
+//   tRow.append(eventName);
 
-  tBody.append(tRow);
+//   tBody.append(tRow);
 
-}
+// }
 
-// On click to push to selected row column
-$(document).on("click", ".event", function () {
-  eventName = $(this).html();
-  console.log("Line 74 " + eventName);
+// // On click to push to selected row column
+// $(document).on("click", ".event", function () {
+//   eventName = $(this).html();
+//   console.log("Line 74 " + eventName);
 
-  // $(eventName).removeClass("event").addClass("selected-event");
-  var eventEntry = {
-    eventName: eventName,
-  };
-  database.ref().push(eventEntry);
+//   // $(eventName).removeClass("event").addClass("selected-event");
+//   var eventEntry = {
+//     eventName: eventName,
+//   };
+//   database.ref().push(eventEntry);
 
 
-});
+// });
 
-database.ref().on("child_added", function (eventSnapshot) {
-  // console.log("Line 82 " + eventSnapshot.val().eventName);
-  addTopEvent(eventSnapshot.val().eventName);
+// database.ref().on("child_added", function (eventSnapshot) {
+//   // console.log("Line 82 " + eventSnapshot.val().eventName);
+//   addTopEvent(eventSnapshot.val().eventName);
   
-  // createEventRow(eventSnapshot.val().eventName);
+//   // createEventRow(eventSnapshot.val().eventName);
  
-  // Handle the errors
-}, function (errorObject) {
-  console.log("Errors handled: " + errorObject.code);
-})  
+//   // Handle the errors
+// }, function (errorObject) {
+//   console.log("Errors handled: " + errorObject.code);
+// })  
 
 
   //end document.ready
