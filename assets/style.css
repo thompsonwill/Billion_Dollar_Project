@@ -1,5 +1,6 @@
 body {
-    background-image:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
+    background-color:black;
+    background:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
     background-size: 100%;
 }
 
@@ -13,7 +14,9 @@ body {
     background-color: white;
     opacity: .75;
 }
-
+#formContainer {
+    opacity: .75;
+}
 h3 {
     font-size: 18px;
     text-align: center;

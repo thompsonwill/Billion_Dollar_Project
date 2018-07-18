@@ -1,15 +1,31 @@
 $(document).ready(function () {
 
   // Initialize Firebase
+  // var config = {
+  //   apiKey: "AIzaSyAo1nuu9HCfzeRVcXGvCpqrVxc_A-4PRbg",
+  //   authDomain: "superhappyfuntime-34e10.firebaseapp.com",
+  //   databaseURL: "https://superhappyfuntime-34e10.firebaseio.com",
+  //   projectId: "superhappyfuntime-34e10",
+  //   storageBucket: "",
+  //   messagingSenderId: "392861754497"
+  // };
+  // firebase.initializeApp(config);
+
+
+  //TODO: add chat in column4
+  //TODO: create on click to add selected event to archive page
+  //TODO: setup google maps API for archive page.
+
   var config = {
-    apiKey: "AIzaSyAo1nuu9HCfzeRVcXGvCpqrVxc_A-4PRbg",
-    authDomain: "superhappyfuntime-34e10.firebaseapp.com",
-    databaseURL: "https://superhappyfuntime-34e10.firebaseio.com",
-    projectId: "superhappyfuntime-34e10",
+    apiKey: "AIzaSyA5MnBksheSQHlIYZefP6Js29LPeN1CS6Q",
+    authDomain: "event-finder-6991c.firebaseapp.com",
+    databaseURL: "https://event-finder-6991c.firebaseio.com",
+    projectId: "event-finder-6991c",
     storageBucket: "",
-    messagingSenderId: "392861754497"
+    messagingSenderId: "285777158363"
   };
   firebase.initializeApp(config);
+
 
 
 
@@ -20,20 +36,14 @@ $(document).ready(function () {
   var phone;
   var groupName;
   var eventName;
-  var votes = 0;
-  var votedOnEvents = [];
-  var voteBtn;
-  
+ 
+
 
   // Add new users to group members column
   function createRow(name) {
-    name = $("<td>").text(name);
+    name = $("<li>").text(name);
 
-    var tBody = $("#groupMembers");
-    var tRow = $("<tr>");
-    tRow.append(name);
-
-    tBody.append(tRow);
+  $('#group-members .list').append(name);
 
   }
 
@@ -55,7 +65,7 @@ $(document).ready(function () {
       groupName: groupName,
     };
 
-    
+
     database.ref().push(newEntry);
     console.log('newEntry', newEntry.name)
   });
@@ -78,8 +88,8 @@ $(document).ready(function () {
   function displayQuery() {
 
     var zipCode = 60605;
-    var eventKeyword = "jazz";
-    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode" + zipCode + "&keyword=" + eventKeyword + "&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
+    var eventKeyword = "music";
+    var queryURL = "https://app.ticketmaster.com/discovery/v2/events.json?postalCode=" + zipCode + "&keyword=" + eventKeyword + "&apikey=j4hMyFitMlxeByuZyEHlAokEHKqkBezJ";
 
 
     $.ajax({
@@ -114,22 +124,18 @@ $(document).ready(function () {
 
   }
 
+  
+  
   // function to add row to selected events column
-  function createSelectedRow(eventName, eventTitle) {
+  function createSelectedRow(eventName) {
     eventName = $("<td>").text(eventName);
 
-    eventName.addClass("event");
-
-    eventTitle = $("<td>").text(eventTitle);
-    eventTitle.addClass("event");
-
-    voteBtn = $("<button>");
-    voteBtn.addClass("vote-button");
-    voteBtn.text(0);
     
+
+  
     var tBody = $("#selected-events");
     var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle, voteBtn);
+    tRow.append(eventName);
 
     tBody.append(tRow);
 
@@ -150,12 +156,11 @@ $(document).ready(function () {
   });
 
   database.ref().on("child_added", function (eventSnapshot) {
-    console.log("Line 82 " + eventSnapshot.val().eventName);
+    // console.log("Line 82 " + eventSnapshot.val().eventName);
     createSelectedRow(eventSnapshot.val().eventName);
-    voteBtn.text(eventSnapshot.val().votes)
+    
     // createEventRow(eventSnapshot.val().eventName);
-
-
+   
 
     // Handle the errors
   }, function (errorObject) {
@@ -163,38 +168,45 @@ $(document).ready(function () {
   })
 
 
-  function voteClicks() {
 
-    // event.preventDefault();
-    // var $target = $(this),
-        // votes = $target.siblings(votes).children(".vote-button")
-    // $votes = $("#sumClicks");
-    // $(this).text;
-    
-    // $votes.text(votes);
-    // votes = $(this).html();
-    $(this).text(votes += 1);
+// add top choice to top choice page via firebase
+function addTopEvent(eventName) {
+  eventName = $("<td>").text(eventName);
 
-    console.log('votes', votes)
+  var tBody = $("#selected-events");
+  var tRow = $("<tr>");
+  tRow.append(eventName);
 
-    var voteEntry = {
-      votes: votes
-    };
-    database.ref().update(voteEntry);
-    console.log('voteEntry', voteEntry)
+  tBody.append(tRow);
 
-  }
+}
 
-  // on click event to count votes per event
-  $(document).on("click", ".vote-button", voteClicks);
+// On click to push to selected row column
+$(document).on("click", ".event", function () {
+  eventName = $(this).html();
+  console.log("Line 74 " + eventName);
 
-
-  database.ref().on("value", function (eventSnapshot) {
-    
-    voteBtn.text(eventSnapshot.val().votes)
+  // $(eventName).removeClass("event").addClass("selected-event");
+  var eventEntry = {
+    eventName: eventName,
+  };
+  database.ref().push(eventEntry);
 
 
-  });
+});
+
+database.ref().on("child_added", function (eventSnapshot) {
+  // console.log("Line 82 " + eventSnapshot.val().eventName);
+  addTopEvent(eventSnapshot.val().eventName);
+  
+  // createEventRow(eventSnapshot.val().eventName);
+ 
+  // Handle the errors
+}, function (errorObject) {
+  console.log("Errors handled: " + errorObject.code);
+})  
+
+
   //end document.ready
 });
 

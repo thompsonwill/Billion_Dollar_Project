@@ -33,6 +33,7 @@
         <p class="lead">The Group</p>
         <form>
             <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
+            <button type="button" onclick="location.href='chosen.html';" class="btn btn-light" id="add-member">Top Choice</button>
         </form>
 
     </div>
@@ -40,18 +41,13 @@
 
     <div class="container-fluid" id="column">
         <div class="row">
-            <div id="group-members" class="col-sm">
+            <div class="col-sm">
                 <h3>Group Members</h3>
-                <table class="table table-striped card-body" id="groupMembers">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Name</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Insert name rows here -->
-                    </tbody>
-                </table>
+                
+
+                <div id="group-members">
+                    <ul class="list-group"></ul>
+                </div>
             </div>
             <div class="col-sm">
                 <h3>Available Events</h3>
@@ -75,7 +71,7 @@
                             <th scope="col">Event Name</th>
                             <th scope="col"></th>
                             <th scope="col">Votes</th>
-                            
+
                         </tr>
                     </thead>
                     <tbody>
@@ -84,12 +80,11 @@
                 </table>
             </div>
             <div class="col-sm">
-                <h3>Top Event</h3>
+                <h3>Chat</h3>
                 <table id="top-event" class="table">
                     <thead class="thead-dark">
                         <tr>
-                            <th scope="col">Event Name</th>
-                            <th scope="col">Votes</th>
+                            <th scope="col">Chat</th>
                         </tr>
                     </thead>
                     <tbody>
