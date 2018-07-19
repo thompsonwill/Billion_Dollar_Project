@@ -11,8 +11,6 @@
         crossorigin="anonymous">
     <link rel="stylesheet" href="assets/style.css">
 
-
-
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -30,17 +28,35 @@
 
     <div class="jumbotron text-white bg-secondary mb-3">
         <h1 class="display-4">Event Finder - Testing</h1>
-        <p class="lead">Top Event Choice!</p>
+        <p class="lead">Top Choice!</p>
         <form>
             <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
-            <button type="button" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Group Page</button>
+            <button type="button" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Back to Group</button>
         </form>
-
-    
-
-
+    </div>
+    <br>
 
 
+
+    <div class="container card text-white bg-dark mb-3" id="formContainer">
+        <div class="card-header">
+            Top Choice Goes here!
+        </div>
+        <div class="row">
+            <div class="col-sm-8" id="top-choice">
+                <h3>Top Choice</h3>
+                
+            </div>
+
+            <div class="col-sm-4" id="map">
+                <h3>Google Map</h3>
+
+            </div>
+
+        </div>
+
+
+        <!-- to do: link to group page on click -->
 
 </body>
 <script src="assets/script.js"></script>

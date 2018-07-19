@@ -36,7 +36,10 @@ $(document).ready(function () {
   var phone;
   var groupName;
   var eventName;
- 
+  var chooseEvent;
+  var eventImage;
+  console.log('chooseEvent', chooseEvent)
+
 
 
   // Add new users to group members column
@@ -99,7 +102,10 @@ $(document).ready(function () {
 
       // var results = response._embedded.events[""].data;
       for (var i = 0; i < 10; i++) {
-        eventName = response._embedded.events[i].name;
+        eventName = $("<img>");
+        eventName.addClass("eventImage");
+        eventName.attr("src", response._embedded.events[i].images[5].url);
+        // eventName = response._embedded.events[i].name;
         eventVenue = response._embedded.events[i]._embedded.venues[0].name;
         createEventRow(eventName, eventVenue);
       };
@@ -109,35 +115,33 @@ $(document).ready(function () {
   displayQuery();
 
   // function to populate event rows from firebase
-  function createEventRow(eventName, eventTitle) {
-    eventName = $("<td>").text(eventName);
+  function createEventRow(eventName, eventVenue, eventImage) {
+    eventName = $("<td>").html(eventName);
     eventName.addClass("event");
+    console.log('eventName', eventName)
 
-    eventTitle = $("<td>").text(eventTitle);
-    eventTitle.addClass("event");
+    eventVenue = $("<td>").text(eventVenue);
+    eventVenue.addClass("event");
 
     var tBody = $("#events");
     var tRow = $("<tr>");
-    tRow.append(eventName, eventTitle);
+    tRow.append(eventName, eventVenue);
 
     tBody.append(tRow);
 
   }
 
-  
-  
+
+
   // function to add row to selected events column
   function createSelectedRow(eventName) {
-    eventName = $("<td>").text(eventName);
-
-    
-
-  
+    eventName = $("<td>").html(eventName);
+    eventName.addClass("selected-events");  
     var tBody = $("#selected-events");
     var tRow = $("<tr>");
     tRow.append(eventName);
-
     tBody.append(tRow);
+    
 
   }
 
@@ -145,7 +149,7 @@ $(document).ready(function () {
   $(document).on("click", ".event", function () {
     eventName = $(this).html();
     console.log("Line 74 " + eventName);
-
+    
     // $(eventName).removeClass("event").addClass("selected-event");
     var eventEntry = {
       eventName: eventName,
@@ -158,9 +162,9 @@ $(document).ready(function () {
   database.ref().on("child_added", function (eventSnapshot) {
     // console.log("Line 82 " + eventSnapshot.val().eventName);
     createSelectedRow(eventSnapshot.val().eventName);
-    
+
     // createEventRow(eventSnapshot.val().eventName);
-   
+
 
     // Handle the errors
   }, function (errorObject) {
@@ -169,42 +173,49 @@ $(document).ready(function () {
 
 
 
-// add top choice to top choice page via firebase
-// function addTopEvent(eventName) {
-//   eventName = $("<td>").text(eventName);
+  // add top choice to top choice page via firebase
+  function addTopChoice(chooseEvent, eventVenue) {
+    chooseEvent= $("<td>").html(chooseEvent);
+    
+    var tBody = $("#top-choice");
+    var tRow = $("<tr>");
+    tRow.append(chooseEvent);
 
-//   var tBody = $("#selected-events");
-//   var tRow = $("<tr>");
-//   tRow.append(eventName);
+    tBody.append(tRow);
 
-//   tBody.append(tRow);
+    var tBody = $("#map");
+    var tRow = $("<tr>");
+    tRow.append(eventVenue);
 
-// }
+    tBody.append(tRow);
+    
+    //add photo
 
-// // On click to push to selected row column
-// $(document).on("click", ".event", function () {
-//   eventName = $(this).html();
-//   console.log("Line 74 " + eventName);
+  }
 
-//   // $(eventName).removeClass("event").addClass("selected-event");
-//   var eventEntry = {
-//     eventName: eventName,
-//   };
-//   database.ref().push(eventEntry);
+  // On click to push to top choice event to chosen page
+  $(document).on("click", ".selected-events", function () {
+    chooseEvent = $(this).html();
+    console.log('chooseEvent', chooseEvent)
+    
+    var topChoiceEvent = {
+      chooseEvent: chooseEvent,
+      eventVenue: eventVenue
+    };
+    database.ref().push(topChoiceEvent);
 
 
-// });
+  });
 
-// database.ref().on("child_added", function (eventSnapshot) {
-//   // console.log("Line 82 " + eventSnapshot.val().eventName);
-//   addTopEvent(eventSnapshot.val().eventName);
-  
-//   // createEventRow(eventSnapshot.val().eventName);
- 
-//   // Handle the errors
-// }, function (errorObject) {
-//   console.log("Errors handled: " + errorObject.code);
-// })  
+  database.ref().on("child_added", function (eventSnapshot) {
+    // console.log("Line 82 " + eventSnapshot.val().eventName);
+    addTopChoice(eventSnapshot.val().chooseEvent, eventSnapshot.val().eventVenue);
+
+
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  })
 
 
   //end document.ready
