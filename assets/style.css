@@ -1,15 +1,18 @@
 body {
     background-color:black;
-    background:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
+    background-image:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
+    background-repeat: no-repeat;
     background-size: 100%;
 }
 
 .jumbotron {
     max-height: 240px;
+    margin-bottom: 30px;
 }
 
 .col-sm {
     border: 2px solid black;
+    /* margin-top: 50px; */
     margin: 8px;
     background-color: white;
     opacity: .75;
@@ -20,4 +23,10 @@ body {
 h3 {
     font-size: 18px;
     text-align: center;
+}
+
+.eventImage {
+    height: 100px;
+    width: 140px;
+    border: 3px solid black;
 }
