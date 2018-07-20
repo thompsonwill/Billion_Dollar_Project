@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
     <link rel="stylesheet" href="assets/style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -26,14 +26,18 @@
 
 
 
-    <div class="jumbotron text-white bg-secondary mb-3">
-        <h1 class="display-4">Event Finder - Testing</h1>
-        <p class="lead">Top Choice!</p>
-        <form>
-            <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
-            <button type="button" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Back to Group</button>
-        </form>
+    <div class="header">
+        <div id="logo">
+            <img src="assets/logo.PNG" width="550" height="170">
+        </div>
+        <div class="buttons">
+            <form>
+                <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
+                <button type="button" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Back to Group</button>
+            </form>
+        </div>
     </div>
+    <br>
     <br>
 
 
@@ -42,23 +46,99 @@
         <div class="card-header">
             Top Choice Goes here!
         </div>
-        <div class="row">
-            <div class="col-sm-8" id="top-choice">
+        <div class="row" id="top-choice-display">
+            <div class="col-sm-3" id="top-choice">
                 <h3>Top Choice</h3>
-                
+
             </div>
 
-            <div class="col-sm-4" id="map">
+            <div class="col-sm-9" id="top-choice-map">
                 <h3>Google Map</h3>
+                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <div id="map"></div>
 
             </div>
 
         </div>
+        <script>
+            function initAutocomplete() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: -33.8688, lng: 151.2195 },
+                    zoom: 13,
+                    mapTypeId: 'roadmap'
+                });
+                
+                $(".pac-input").val(eventVenue);
+                // Create the search box and link it to the UI element.
+                // var input = eventVenue;
+                var input = document.getElementById('pac-input');
+                var searchBox = new google.maps.places.SearchBox(input);
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                // Bias the SearchBox results towards current map's viewport.
+                map.addListener('bounds_changed', function () {
+                    searchBox.setBounds(map.getBounds());
+                });
+
+                var markers = [];
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+                searchBox.addListener('places_changed', function () {
+                    var places = searchBox.getPlaces();
+                    console.log(eventVenue);
+
+                    if (places.length == 0) {
+                        return;
+                    }
+
+                    // Clear out the old markers.
+                    markers.forEach(function (marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+
+                    // For each place, get the icon, name and location.
+                    var bounds = new google.maps.LatLngBounds();
+                    places.forEach(function (place) {
+                        if (!place.geometry) {
+                            console.log("Returned place contains no geometry");
+                            return;
+                        }
+                        var icon = {
+                            url: place.icon,
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                        };
+
+                        // Create a marker for each place.
+                        markers.push(new google.maps.Marker({
+                            map: map,
+                            icon: icon,
+                            title: place.name,
+                            position: place.geometry.location
+                        }));
+
+                        if (place.geometry.viewport) {
+                            // Only geocodes have viewport.
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.extend(place.geometry.location);
+                        }
+                    });
+                    map.fitBounds(bounds);
+                });
+            }
+
+        </script>
 
 
-        <!-- to do: link to group page on click -->
+
 
 </body>
 <script src="assets/script.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUP74P_2xFIeoJ6zdXIXZWMcslrYmPqXg&libraries=places&callback=initAutocomplete"
+    async defer></script>
 
 </html>
