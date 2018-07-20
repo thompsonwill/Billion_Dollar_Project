@@ -9,8 +9,8 @@
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
-        <link rel="stylesheet" href="assets/style.css">
-
+    <link rel="stylesheet" href="assets/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
@@ -26,10 +26,10 @@
 
 
 
-    <div class="jumbotron text-white bg-secondary mb-3">
-        <h1 class="display-4">Event Finder - Testing</h1>
-        <p class="lead">Event Planner App!</p>
-
+    <div class="header">
+        <div id="logo">
+            <img src="assets/logo.PNG" width="550" height="170">
+        </div>
     </div>
     <br>
 
@@ -48,7 +48,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="phone">Phone Number</label> <br>
+                    <label for="phone">Phone Number</label>
+                    <br>
                     <input type="text" class="input bfh-phone" id="phone-input" data-format="+1 (ddd) ddd-dddd">
                 </div>
 
@@ -60,7 +61,7 @@
                 <button type="submit" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Create Group</button>
             </form>
         </div>
- 
+
         <!-- to do: link to group page on click -->
 
 </body>

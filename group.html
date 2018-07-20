@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
         crossorigin="anonymous">
     <link rel="stylesheet" href="assets/style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 
     <!-- jQuery library -->
@@ -28,25 +28,28 @@
 
 
 
-    <div class="jumbotron text-white bg-secondary mb-3">
-        <h1 class="display-4">Event Finder - Testing</h1>
-        <p class="lead">The Group</p>
-        <form>
-            <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
-            <button type="button" onclick="location.href='chosen.html';" class="btn btn-light" id="add-member">Top Choice</button>
-        </form>
-
+    <div class="header">
+        <div id="logo">
+            <img src="assets/logo.PNG" width="550" height="170">
+        </div>
+        <div class="buttons">
+            <form>
+                <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
+                <button type="button" onclick="location.href='chosen.html';" class="btn btn-light" id="add-member">Top Choice</button>
+            </form>
+        </div>
     </div>
+    <br>
     <br>
 
     <div class="container-fluid" id="column">
         <div class="row">
             <div class="col-sm">
                 <h3>Group Members</h3>
-                
+
 
                 <div id="group-members">
-                    <ul class="list"></ul>
+                    <ul class="user-list"></ul>
                 </div>
             </div>
             <div class="col-sm">
@@ -69,28 +72,47 @@
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col">Event Name</th>
-                            <th scope="col"></th>
-                            <th scope="col">Votes</th>
+                            <!-- <th scope="col"></th> -->
+                            <!-- <th scope="col">Votes</th> -->
 
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Insert name rows here -->
+                        <!-- Insert selected rows here -->
                     </tbody>
                 </table>
             </div>
-            <div class="col-sm">
-                <h3>Chat</h3>
-                <table id="top-event" class="table">
-                    <thead class="thead-dark">
+            <div class="col-sm"><h3>Chat</h3><iframe src="chat.html" height="500px"></iframe>
+                 <!--
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">@</span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" id="username">
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">With textarea</span>
+                    </div>
+                    <textarea class="form-control" aria-label="With textarea" id="postText"></textarea>
+                </div>
+                <br>
+                <button type="submit" class="btn btn-primary" id="post">Post</button>
+
+                <br>
+                <div id="chat-box">
+                    <ul class="chat-list"></ul>
+                </div>
+
+                 <table class="table" id="chatBox">
+                    <thead>
                         <tr>
-                            <th scope="col">Chat</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Message</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Insert name rows here -->
-                    </tbody>
-                </table>
+                        Insert name rows here -->
             </div>
         </div>
     </div>

@@ -31,6 +31,8 @@ $(document).ready(function () {
 
   var database = firebase.database();
 
+ 
+
   // Initial Values
   var name;
   var phone;
@@ -38,15 +40,18 @@ $(document).ready(function () {
   var eventName;
   var chooseEvent;
   var eventImage;
+  var chatName = "";
+  var message = "";
   console.log('chooseEvent', chooseEvent)
 
 
 
   // Add new users to group members column
-  function createRow(name) {
-    name = $("<li>").text(name);
+  function createRow(userName) {
+    name = $("<li>").text(userName);
 
-    $('#group-members .list').append(name);
+    name.appendTo(".user-list");
+    // $('#group-members .user-list').append(name);
 
   }
 
@@ -75,10 +80,10 @@ $(document).ready(function () {
 
 
   // event to pull user names from firebase 
-  database.ref().on("child_added", function (childSnapshot) {
-    console.log(childSnapshot.val());
+  database.ref().on("child_added", function (userSnapshot) {
+    console.log(userSnapshot.val());
 
-    createRow(childSnapshot.val().name);
+    createRow(userSnapshot.val().name);
 
 
     // Handle the errors
@@ -133,15 +138,48 @@ $(document).ready(function () {
 
 
 
+
+  // function to add row to the chat table
+  function createChatRow(chatName, message) {
+    var chatContent = $("<li>").html("<b>" + chatName + ": </b>" + message);
+
+    chatContent.prependTo(".chat-list");
+
+  }
+
+  //Data function for chat
+  database.ref().on("child_added", function (chatSnapshot) {
+    createChatRow(chatSnapshot.val().chatName, chatSnapshot.val().message);
+    // Handle the errors
+  }, function (errorObject) {
+    console.log("Errors handled: " + errorObject.code);
+  });
+
+
+  $("#post").on("click", function (event) {
+    // Don't refresh the page!
+    event.preventDefault();
+    chatName = $("#username").val().trim();
+    message = $("#postText").val().trim();
+
+    $("#postText").val("");
+
+    database.ref().push({
+      chatName: chatName,
+      message: message
+    });
+  });
+
   // function to add row to selected events column
   function createSelectedRow(eventName) {
     eventName = $("<td>").html(eventName);
-    eventName.addClass("selected-events");  
-    var tBody = $("#selected-events");
+    eventName.addClass("selected-events");
+    // var tBody = $("#selected-events");
     var tRow = $("<tr>");
     tRow.append(eventName);
-    tBody.append(tRow);
-    
+    // tBody.append(tRow);
+    tRow.appendTo("#selected-events");
+
 
   }
 
@@ -149,7 +187,7 @@ $(document).ready(function () {
   $(document).on("click", ".event", function () {
     eventName = $(this).html();
     console.log("Line 74 " + eventName);
-    
+
     // $(eventName).removeClass("event").addClass("selected-event");
     var eventEntry = {
       eventName: eventName,
@@ -175,20 +213,22 @@ $(document).ready(function () {
 
   // add top choice to top choice page via firebase
   function addTopChoice(chooseEvent, eventVenue) {
-    chooseEvent= $("<td>").html(chooseEvent);
-    
+    chooseEvent = $("<td>").html(chooseEvent);
+
     var tBody = $("#top-choice");
     var tRow = $("<tr>");
     tRow.append(chooseEvent);
 
     tBody.append(tRow);
 
-    var tBody = $("#map");
+    var tBody = $("#top-choice-map");
     var tRow = $("<tr>");
     tRow.append(eventVenue);
 
     tBody.append(tRow);
-    
+
+
+
     //add photo
 
   }
@@ -197,7 +237,7 @@ $(document).ready(function () {
   $(document).on("click", ".selected-events", function () {
     chooseEvent = $(this).html();
     console.log('chooseEvent', chooseEvent)
-    
+
     var topChoiceEvent = {
       chooseEvent: chooseEvent,
       eventVenue: eventVenue
