@@ -59,6 +59,7 @@ $(document).ready(function () {
         chatContent.prependTo(".chat-list");
     }
 
+    $('.modal').modal();
     //Data function for chat
     database.ref().on("child_added", function (chatSnapshot) {
         createChatRow(chatSnapshot.val().chatName, chatSnapshot.val().message);
@@ -71,15 +72,24 @@ $(document).ready(function () {
     $("#post").on("click", function (event) {
         // Don't refresh the page!
         event.preventDefault();
-        chatName = $("#username").val().trim();
-        message = $("#postText").val().trim();
 
-        $("#postText").val("");
+        // Prevent empty form submits
+        if (($.trim($("#username").val()) === "" || $.trim($("#postText").val()) === "")) {
+          $("#post").attr("href", "#modal1")
+          $('.modal').modal();
+        } else {
+          $("#post").attr("href", "#")
+          chatName = $("#username").val().trim();
+          message = $("#postText").val().trim();
 
-        database.ref().push({
-            chatName: chatName,
-            message: message
-        });
+          $("#postText").val("");
+
+          database.ref().push({
+              chatName: chatName,
+              message: message
+          });
+        }
+
     });
 
 
@@ -95,13 +105,3 @@ $(document).ready(function () {
 
     //end document.ready
 });
-
-
-
-
-
-
-
-
-
-
