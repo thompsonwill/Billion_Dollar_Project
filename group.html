@@ -34,6 +34,8 @@
         </div>
         <div class="buttons">
             <form>
+                <label for="phone">Phone Number:</label>
+                <input type="text" class="input bfh-phone" id="phone-input" data-format="+1 (ddd) ddd-dddd" value="###-###-####">
                 <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
                 <button type="button" onclick="location.href='chosen.html';" class="btn btn-light" id="add-member">Top Choice</button>
             </form>
@@ -73,7 +75,7 @@
                         <tr>
                             <th scope="col">Event Name</th>
                             <!-- <th scope="col"></th> -->
-                            <!-- <th scope="col">Votes</th> -->
+                            <!-- <th scope="col">Venue</th> -->
 
                         </tr>
                     </thead>
@@ -82,8 +84,10 @@
                     </tbody>
                 </table>
             </div>
-            <div class="col-sm"><h3>Chat</h3><iframe src="chat.html" height="500px"></iframe>
-                 <!--
+            <div class="col-sm">
+                <h3>Chat</h3>
+                <iframe src="chat.html" height="500px"></iframe>
+                <!--
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon1">@</span>

@@ -13,18 +13,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            console.log("document loaded");
+        });
 
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        $(window).on("load", function () {
+            console.log("window loaded");
+        });
+    </script>
+</head>
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/5.2.0/firebase.js"></script>
 
 </head>
 
 <body>
 
-
+    
 
     <div class="header">
         <div id="logo">
@@ -32,6 +41,8 @@
         </div>
         <div class="buttons">
             <form>
+                <label for="phone">Phone Number:</label>
+                <input type="text" class="input bfh-phone" id="phone-input" data-format="+1 (ddd) ddd-dddd" value="###-###-####">
                 <button type="submit" onclick="location.href='index.html';" class="btn btn-light" id="add-member">Invite Friend</button>
                 <button type="button" onclick="location.href='group.html';" class="btn btn-light" id="add-member">Back to Group</button>
             </form>
@@ -43,9 +54,7 @@
 
 
     <div class="container card text-white bg-dark mb-3" id="formContainer">
-        <div class="card-header">
-            Top Choice Goes here!
-        </div>
+
         <div class="row" id="top-choice-display">
             <div class="col-sm-3" id="top-choice">
                 <h3>Top Choice</h3>
@@ -54,21 +63,22 @@
 
             <div class="col-sm-9" id="top-choice-map">
                 <h3>Google Map</h3>
-                <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                <input id="pac-input" class="controls" type="text" value="">
                 <div id="map"></div>
 
             </div>
 
         </div>
         <script>
+            // $(document).ready(function () {
             function initAutocomplete() {
                 var map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: -33.8688, lng: 151.2195 },
                     zoom: 13,
                     mapTypeId: 'roadmap'
                 });
-                
-                $(".pac-input").val(eventVenue);
+
+                // $(".pac-input").val(eventVenue);
                 // Create the search box and link it to the UI element.
                 // var input = eventVenue;
                 var input = document.getElementById('pac-input');
@@ -130,7 +140,7 @@
                     map.fitBounds(bounds);
                 });
             }
-
+            // });
         </script>
 
 
