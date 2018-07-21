@@ -33,7 +33,7 @@
 
 <body>
 
-    
+
 
     <div class="header">
         <div id="logo">
@@ -70,8 +70,27 @@
 
         </div>
         <script>
+            $(window).on("load", function () {
+            setTimeout(initAutocomplete, 2000);
+
+        });
             // $(document).ready(function () {
             function initAutocomplete() {
+                var input = document.getElementById('pac-input');
+                input = input;
+                input.focus();
+                input.select();
+                google.maps.event.trigger(input, "select"),
+                    // google.maps.event.trigger(input, "focus"),
+
+                    google.maps.event.trigger(input, 'keydown', { keyCode: 40 }),
+                    google.maps.event.trigger(input, 'keydown', { keyCode: 13, triggered: true }),
+                    google.maps.event.trigger(input, "focus"),
+                    google.maps.event.trigger(input, 'keydown', { keyCode: 13, triggered: true });
+
+
+
+
                 var map = new google.maps.Map(document.getElementById('map'), {
                     center: { lat: -33.8688, lng: 151.2195 },
                     zoom: 13,
@@ -81,7 +100,8 @@
                 // $(".pac-input").val(eventVenue);
                 // Create the search box and link it to the UI element.
                 // var input = eventVenue;
-                var input = document.getElementById('pac-input');
+
+
                 var searchBox = new google.maps.places.SearchBox(input);
                 map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
