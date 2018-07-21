@@ -1,6 +1,6 @@
 body {
     background-color:black;
-    background-image:url('https://cdn.pixabay.com/photo/2014/05/03/01/02/concert-336695_1280.jpg');
+    background-image:url('concert.jpg');
     background-repeat: no-repeat;
     background-size: 100%;
 }
@@ -23,6 +23,7 @@ body {
     margin: 8px;
     background-color: white;
     opacity: .75;
+    border-radius: 20px;
 }
 #formContainer {
     opacity: .75;
@@ -58,6 +59,10 @@ ul {
 #top-choice-display {
     height: 600px;
     padding-bottom: 100px;
+}
+
+label {
+  color: white;
 }
 
       /* Always set the map height explicitly to define the size of the div

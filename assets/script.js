@@ -31,7 +31,7 @@ $(document).ready(function () {
 
   var database = firebase.database();
 
- 
+
 
   // Initial Values
   var name;
@@ -42,6 +42,7 @@ $(document).ready(function () {
   var eventImage;
   var chatName = "";
   var message = "";
+  var title;
   console.log('chooseEvent', chooseEvent)
 
 
@@ -63,14 +64,14 @@ $(document).ready(function () {
 
     name = $("#name-input").val().trim();
     console.log('name', name)
-    phone = $("#phone-input").val().trim();
-    groupName = $("#groupName").val().trim();
+    // phone = $("#phone-input").val().trim();
+    // groupName = $("#groupName").val().trim();
 
 
     var newEntry = {
       name: name,
-      phone: phone,
-      groupName: groupName,
+      // phone: phone,
+      // groupName: groupName,
     };
 
 
@@ -110,8 +111,9 @@ $(document).ready(function () {
         eventName = $("<img>");
         eventName.addClass("eventImage");
         eventName.attr("src", response._embedded.events[i].images[5].url);
+        eventName.attr("title", response._embedded.events[i].name);
         // eventName = response._embedded.events[i].name;
-        eventVenue = response._embedded.events[i]._embedded.venues[0].name;
+        eventVenue = (response._embedded.events[i]._embedded.venues[0].name);
         createEventRow(eventName, eventVenue);
       };
     });
@@ -171,12 +173,13 @@ $(document).ready(function () {
   });
 
   // function to add row to selected events column
-  function createSelectedRow(eventName) {
+  function createSelectedRow(eventName, eventVenue) {
     eventName = $("<td>").html(eventName);
     eventName.addClass("selected-events");
+    
     // var tBody = $("#selected-events");
     var tRow = $("<tr>");
-    tRow.append(eventName);
+    tRow.append(eventName, eventVenue);
     // tBody.append(tRow);
     tRow.appendTo("#selected-events");
 
@@ -223,10 +226,23 @@ $(document).ready(function () {
 
     var tBody = $("#top-choice-map");
     var tRow = $("<tr>");
-    tRow.append(eventVenue);
-
+    tBody.append(eventVenue);
     tBody.append(tRow);
+    $("#pac-input").val(eventVenue);
 
+    $(window).on("load", function () {
+      setTimeout(autoTransition, 500);
+      function autoTransition() {
+        $("#pac-input").focus();
+        (jQuery.event.trigger({ type: 'keydown', which: 13 }))
+        // setTimeout(autoTransition2, 1000 * 1);
+        // function autoTransition2() {
+        // var e = jQuery.Event("keydown", { keyCode: 77 });
+        // $("#pac-input").trigger(e);
+        // autocomplete.simulate("keydown", { keyCode: $.ui.keyCode.ENTER });
+        // };
+      };
+    })
 
 
     //add photo
